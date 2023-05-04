@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "460480417801",
+    "project_id": "minimezun-59770",
+    "storage_bucket": "minimezun-59770.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460480417801:android:b6eaf78182d71ae42b68d8",
+        "android_client_info": {
+          "package_name": "com.example.minimezun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460480417801-ksepm2uf0rn9b1nne7smr0i9mo70390b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_Jgfp2yGdU_SN2y_A1OnqTmDt9FALLq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460480417801-ksepm2uf0rn9b1nne7smr0i9mo70390b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
