@@ -2,9 +2,7 @@ package com.example.minimezun
 
 import android.Manifest
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -19,53 +17,39 @@ import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
+import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.lang.Exception
+import java.lang.StringBuilder
 
-class CreateAccount : AppCompatActivity() {
+class addContent : AppCompatActivity() {
 
-    private var iv: ImageView? = null
+    private var galleryContent: Button? = null
+    private var cameraContent: Button? = null
+    private var imgContent: ImageView? = null
+    private var saveContent: Button? = null
+    private var textContent: EditText? = null
+
     private val PERMISSION_CODE_CAMERA: Int = 1000
     private val PERMISSION_CODE_GALLERY: Int = 1004
     private var imgUri: Uri? = null
     private var IMAGE_CAPTURE_CODE = 1001
     private var PICK_IMAGE_CODE = 1002
-    private var username: EditText? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_account)
+        setContentView(R.layout.activity_add_content)
 
-        val name = findViewById<EditText>(R.id.namePT)
-        val surname = findViewById<EditText>(R.id.surnamePT)
-        username = findViewById<EditText>(R.id.usernameCreatePT)
-        val dates = findViewById<EditText>(R.id.firstYearPT)
-        val email = findViewById<EditText>(R.id.emailCreatePT)
-        val password = findViewById<EditText>(R.id.passwordCreatePT)
-        val createButton = findViewById<Button>(R.id.createButton)
-        val photoButton = findViewById<Button>(R.id.photoButton)
-        val galleryButton = findViewById<Button>(R.id.galleryButton)
-        iv = findViewById(R.id.photoImageView)
-        iv?.clipToOutline = true
+        galleryContent = findViewById(R.id.galleryContent)
+        cameraContent = findViewById(R.id.cameraContent)
+        imgContent = findViewById(R.id.imgContent)
+        saveContent = findViewById(R.id.contentSave)
+        textContent = findViewById(R.id.textContent)
 
-        //myCallback: (result: String?) -> Unit
-        createButton.setOnClickListener {
+        imgContent?.setImageResource(R.drawable.empty)
 
-            if (!name.text.isEmpty() && !surname.text.isEmpty() && !username!!.text.isEmpty() && !dates.text.isEmpty() && !email.text.isEmpty() && !password.text.isEmpty()) {
-                val graduate = Graduate(
-                    name.text.toString(),
-                    surname.text.toString(),
-                    username!!.text.toString(),
-                    dates.text.toString(),
-                    email.text.toString(),
-                    password.text.toString(),
-                    "","","","","","",""
-                )
-                checkTexts(graduate, ::decide)
-            }
-        }
-
-        galleryButton.setOnClickListener {
+        galleryContent?.setOnClickListener{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_DENIED
@@ -87,7 +71,7 @@ class CreateAccount : AppCompatActivity() {
             }
         }
 
-        photoButton.setOnClickListener {
+        cameraContent?.setOnClickListener{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED
                     || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -111,81 +95,32 @@ class CreateAccount : AppCompatActivity() {
                 openCamera()
             }
         }
-    }
 
-    private fun openGallery() {
-        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        startActivityForResult(gallery, PICK_IMAGE_CODE)
-    }
+        saveContent?.setOnClickListener{
 
-    fun checkTexts(graduate: Graduate, cb: (kontrol: Int?, graduate: Graduate?) -> Unit) {
-        val db = Firebase.firestore
-        var kontrol = 0;
-        var count = 0;
-        db.collection("graduates").whereEqualTo("email", graduate.email.toString()).get()
-            .addOnSuccessListener { documents ->
-
-                if (!documents.isEmpty) {
-                    kontrol = 1;
-                }
-                count++;
-                if (count == 2) {
-                    cb(kontrol, graduate)
-                }
-            }
-        db.collection("graduates").whereEqualTo("username", graduate.username.toString()).get()
-            .addOnSuccessListener { documents ->
-
-                if (!documents.isEmpty) {
-                    kontrol = 2;
-                }
-                count++;
-                if (count == 2) {
-                    cb(kontrol, graduate)
-                }
-            }
-    }
-
-    fun decide(kontrol: Int?, graduate: Graduate?) {
-        if (kontrol == 0) {
             val db = Firebase.firestore
-            db.collection("graduates").document(graduate!!.username.toString()).set(graduate)
+            val str = readFromFile()
+
+            var strForRandomName = getRandomString(12)
+            val item = hashMapOf(
+                "text" to textContent?.text.toString(),
+                "username" to str!!,
+                "poolid" to strForRandomName,
+            )
+            db.collection("pool").document(strForRandomName).set(item)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Kayıt Başarılı.", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, Login::class.java)
-                    imgUri?.let {uploadImage(it)}
+                    //val intent = Intent(this, Login::class.java)
+                    imgUri?.let {uploadImage(it,strForRandomName)}
                     Thread.sleep(1_000)
-                    startActivity(intent)
+                    //startActivity(intent)
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Kayıt Başarısız.", Toast.LENGTH_SHORT).show()
                 }
-        } else if (kontrol == 1) {
-            Toast.makeText(this, "Bu Email Kullanımda", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Bu Kullanıcı Adı Kullanımda", Toast.LENGTH_SHORT).show()
+
         }
     }
-
-    fun uploadImage(imageuri : Uri){
-        val storageRef = FirebaseStorage.getInstance().reference
-        val uploadTask = storageRef.child("graduates/${username!!.text.toString()}pp.jpg").putFile(imageuri)
-        uploadTask.addOnSuccessListener {
-            Toast.makeText(this, "foto yukleme basarılı", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
-            // set image captured on camera
-            iv?.setImageURI(imgUri)
-        } else if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-            imgUri = data?.data
-            iv?.setImageURI(imgUri)
-        }
-    }
-
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
@@ -197,7 +132,38 @@ class CreateAccount : AppCompatActivity() {
 
     }
 
-    // handle permission result
+    fun uploadImage(imageuri : Uri, strForRandomName: String){
+        val str = readFromFile()
+        val storageRef = FirebaseStorage.getInstance().reference
+        val uploadTask = storageRef.child("imagePool/${str!!}/${strForRandomName}.jpg").putFile(imageuri)
+        uploadTask.addOnSuccessListener {
+            //Toast.makeText(this, "foto yukleme basarılı", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, PICK_IMAGE_CODE)
+    }
+
+    fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_CAPTURE_CODE) {
+            // set image captured on camera
+            imgContent?.setImageURI(imgUri)
+        } else if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_CODE) {
+            imgUri = data?.data
+            imgContent?.setImageURI(imgUri)
+        }
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -224,6 +190,24 @@ class CreateAccount : AppCompatActivity() {
                             //permission from popup was denied
                         }
                         )
+        }
+    }
+
+    fun readFromFile(): String? {
+        try {
+            val fis: FileInputStream
+            fis = openFileInput("usernameFile")
+            val inputStreamReader = InputStreamReader(fis)
+            val bufferedReader = BufferedReader(inputStreamReader)
+            var stringBuilder = StringBuilder()
+            var text: String? = null
+            while ({ text = bufferedReader.readLine(); text }() != null) {
+                stringBuilder.append(text)
+            }
+            return stringBuilder.toString()
+        } catch (e: Exception) {
+            println(e)
+            return null
         }
     }
 }

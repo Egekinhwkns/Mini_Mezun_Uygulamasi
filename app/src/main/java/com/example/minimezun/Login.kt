@@ -38,15 +38,16 @@ class Login : AppCompatActivity() {
                 .get().addOnSuccessListener {  documents ->
                 if(!documents.isEmpty){
                     writeToFile(usernamePT.text.toString())
-                    Toast.makeText(this,"Basarılıııııı", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this,"Basarılıııııı", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, Landing::class.java)
+                    startActivity(intent)
                     // Giriş yapılcak burda.
                 }
             }
         }
 
         createAccountButton.setOnClickListener{
-            //val intent = Intent(this, CreateAccount::class.java)
-            val intent = Intent(this, Profile::class.java)
+            val intent = Intent(this, CreateAccount::class.java)
             startActivity(intent)
         }
     }

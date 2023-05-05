@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".addContent">
+
+    <ImageView
+        android:id="@+id/imgContent"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="119dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <EditText
+        android:id="@+id/textContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:ems="10"
+        android:hint="Text içeriği için buraya yazınız."
+        android:inputType="textMultiLine"
+        android:lines="10"
+        android:minLines="8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgContent" />
+
+    <Button
+        android:id="@+id/contentSave"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
+        android:text="Paylaş!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textContent" />
+
+    <Button
+        android:id="@+id/galleryContent"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="30dp"
+        android:text="Galeriden Seç"
+        app:layout_constraintEnd_toStartOf="@+id/imgContent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/cameraContent"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="196dp"
+        android:layout_marginEnd="30dp"
+        android:text="Kamera Kullan"
+        app:layout_constraintEnd_toStartOf="@+id/imgContent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

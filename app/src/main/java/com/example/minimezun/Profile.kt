@@ -43,6 +43,7 @@ class Profile : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         profileImg = findViewById<ImageView>(R.id.imageView)
+        profileImg?.clipToOutline = true
         profileName = findViewById<EditText>(R.id.profileNamePT)
         profileSurname = findViewById<EditText>(R.id.profileSurnamePT)
         profileUsername = findViewById<EditText>(R.id.profileUsernamePT)
