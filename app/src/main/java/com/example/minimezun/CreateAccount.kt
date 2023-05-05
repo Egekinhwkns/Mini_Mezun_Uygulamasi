@@ -171,7 +171,7 @@ class CreateAccount : AppCompatActivity() {
         val storageRef = FirebaseStorage.getInstance().reference
         val uploadTask = storageRef.child("graduates/${username!!.text.toString()}pp.jpg").putFile(imageuri)
         uploadTask.addOnSuccessListener {
-            Toast.makeText(this, "foto yukleme basarılı", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Fotoğraf Yükleme Başarılı", Toast.LENGTH_SHORT).show()
         }
     }
 

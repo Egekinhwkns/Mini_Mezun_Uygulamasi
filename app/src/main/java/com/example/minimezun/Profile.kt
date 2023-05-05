@@ -109,7 +109,7 @@ class Profile : AppCompatActivity() {
         }.addOnFailureListener {
             // Handle any errors
             profileImg?.setImageResource(R.drawable.empty)
-            Toast.makeText(this, "${str}", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "${str}", Toast.LENGTH_SHORT).show()
         }
 
         str?.let {

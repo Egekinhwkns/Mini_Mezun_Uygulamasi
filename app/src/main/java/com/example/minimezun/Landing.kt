@@ -88,7 +88,6 @@ class Landing : AppCompatActivity() {
                 val username = document["username"].toString()
                 val poolid = document["poolid"].toString()
                 val sharedItems = PoolSharedItem(text,username,poolid)
-                //Toast.makeText(this,"Basarılıııııı", Toast.LENGTH_SHORT).show()
                 dataSets.add(sharedItems)
             }
 
@@ -112,7 +111,7 @@ class Landing : AppCompatActivity() {
                             poolData.add(PoolModel(pp!!,imgPool!!,txt))
                             rv?.adapter = poolAdapter(poolData)
                         }
-                        Toast.makeText(this,"${poolData}", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(this,"${poolData}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
