@@ -78,7 +78,7 @@ class Profile : AppCompatActivity() {
                     "company", profileCompany!!.text.toString(),
                     "phone", profilePhone!!.text.toString()
                 ).addOnSuccessListener {
-
+                    Toast.makeText(this,"Kayıt Başarılı.", Toast.LENGTH_SHORT).show()
                 }
             }
             }

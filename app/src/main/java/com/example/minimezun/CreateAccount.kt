@@ -63,6 +63,9 @@ class CreateAccount : AppCompatActivity() {
                 )
                 checkTexts(graduate, ::decide)
             }
+            else{
+                Toast.makeText(this, "Lütfen Boş Alanları Doldurun.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         galleryButton.setOnClickListener {
@@ -70,11 +73,9 @@ class CreateAccount : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_DENIED
                 ) {
-                    // permission is not given.
+                    // izin verilmemiş
                     val permission =
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE) // write external ihtiyacımız olmayabilir.
-
-                    //show popup
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
                     requestPermissions(permission, PERMISSION_CODE_GALLERY)
 
                 } else {
@@ -89,25 +90,19 @@ class CreateAccount : AppCompatActivity() {
 
         photoButton.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED
-                    || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED
-                ) {
-                    // permission is not given.
+                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    // izin verilmemiş
                     val permission = arrayOf(
                         Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) // write external ihtiyacımız olmayabilir.
-
-                    //show popup
+                    )
                     requestPermissions(permission, PERMISSION_CODE_CAMERA)
 
                 } else {
-                    //permission already granted
+                    //izin zaten verilmiş
                     openCamera()
                 }
             } else {
-                // system is old
+                // sistem eski
                 openCamera()
             }
         }

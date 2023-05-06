@@ -73,25 +73,19 @@ class addContent : AppCompatActivity() {
 
         cameraContent?.setOnClickListener{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED
-                    || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_DENIED
-                ) {
-                    // permission is not given.
+                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    // izin verilmedi.
                     val permission = arrayOf(
                         Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) // write external ihtiyacımız olmayabilir.
-
-                    //show popup
+                    )
                     requestPermissions(permission, PERMISSION_CODE_CAMERA)
 
                 } else {
-                    //permission already granted
+                    //izin zaten verilmiş
                     openCamera()
                 }
             } else {
-                // system is old
+                // sistem eski
                 openCamera()
             }
         }
@@ -110,10 +104,8 @@ class addContent : AppCompatActivity() {
             db.collection("pool").document(strForRandomName).set(item)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Kayıt Başarılı.", Toast.LENGTH_SHORT).show()
-                    //val intent = Intent(this, Login::class.java)
                     imgUri?.let {uploadImage(it,strForRandomName)}
                     Thread.sleep(1_000)
-                    //startActivity(intent)
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Kayıt Başarısız.", Toast.LENGTH_SHORT).show()

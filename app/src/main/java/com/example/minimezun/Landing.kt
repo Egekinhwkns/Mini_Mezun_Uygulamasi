@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -33,7 +34,7 @@ class Landing : AppCompatActivity() {
         ppView = findViewById(R.id.ppView)
         ppView?.clipToOutline= true
         rv = findViewById(R.id.recyclerView)
-
+        rv?.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL))
 
         val str = readFromFile()
         val img = FirebaseStorage.getInstance().reference.child("graduates/${str}pp.jpg")

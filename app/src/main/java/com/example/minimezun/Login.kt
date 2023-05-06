@@ -38,10 +38,11 @@ class Login : AppCompatActivity() {
                 .get().addOnSuccessListener {  documents ->
                 if(!documents.isEmpty){
                     writeToFile(usernamePT.text.toString())
-                    //Toast.makeText(this,"Basarılıııııı", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, Landing::class.java)
                     startActivity(intent)
-                    // Giriş yapılcak burda.
+                }
+                    else{
+                    Toast.makeText(this,"Kullanıcı Bulunamadı.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
